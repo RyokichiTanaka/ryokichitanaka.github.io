@@ -1,1 +1,2 @@
 Ryokichi Tanaka
+Tohoku University
