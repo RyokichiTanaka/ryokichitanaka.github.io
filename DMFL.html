@@ -16,9 +16,12 @@ float[] sum;
 float gamma, rho, total, q, mag, cmax, lambda, K;
 float x1=150;
 float x2=850;
+//magnetization
+float[] S;
+int T;
 
 void setup(){
-  size(1100, 400);
+  size(1100, 500);
   gamma=0.5;//inverse temperature
   N=100;//lattice size
   rho=0.5;//density (parameter of Bernoulli)
@@ -27,12 +30,16 @@ void setup(){
   eta=new int[N];//configuration
   p=new float[N];
   sum=new float[N+1];
+  T=900;
   
   //set an initial configuration
   for(i=0; i<N; i++){
     if(random(1)<=rho) eta[i]=1; else eta[i]=-1;
     //random(1) produces a float from 0 up to 1 (but 1 is not included) equally likely
   }  
+  
+  //magnetization
+  S = new float[width];
 }
 
 //define the jump rate c(a, b, e)
@@ -105,33 +112,55 @@ void gk(){
   fill(0);
   text("the normalized magnetization:", 140, 250);
   text(mag/N, 300, 250);
-  stroke(#CB4154);
-      fill(#CB4154);
-      ellipse(500+(mag/N)*100, 250,6,6);
+  //stroke(#CB4154);
+  //    fill(#CB4154);
+  //    ellipse(500+(mag/N)*100, 250,6,6);
       
   //bar for the normalized magnetization
   
+  //stroke(4);
+  //fill(0);
+  //line(400,250,600,250);//horizatal
+  //line(600,245,600,255);//vertical right
+  //line(500,245,500,255);//vertical center
+  //line(400,245,400,255);//vertical left
+  
+  //text("1", 600-3, 240);
+  //text("0", 500-3, 240);
+  //text("-1",400-3, 240);
+  
+  for (int k = 1; k < T; k++) { 
+    S[k-1] = S[k]; 
+  } 
+  // Add the new values to the end of the array 
+  S[T-1]=mag;
+  
+  for(int k = 1; k < T; k++) {
+    // Draw the x-values
+      noStroke();
+      fill(#5D8AA8);
+      ellipse(100+k, 400-(S[k]/N)*50,1,1);
+      
+  }
   stroke(4);
   fill(0);
-  line(400,250,600,250);//horizatal
-  line(600,245,600,255);//vertical right
-  line(500,245,500,255);//vertical center
-  line(400,245,400,255);//vertical left
+  line(550,350,550,450);//vertical center
+  line(100,350,1000,350);
+  line(100,400,1000,400);//horizatal at level 400 (center)
+  line(100,450,1000,450);
   
-  text("1", 600-3, 240);
-  text("0", 500-3, 240);
-  text("-1",400-3, 240);
 }
 
 
 void draw(){
   frameRate(60);
-  for(i=0; i<100; i++){
-    for(j=0; j<100; j++){
+  for(i=0; i<10; i++){
+    for(j=0; j<10; j++){
       gk();//to be defined below
     }
   }
-
+  
+  
   //set the parameter bar
   fill(0);
   text("gamma", 700, 255);
@@ -155,6 +184,16 @@ void mouseDragged(){
     {x2=mouseX; gamma=(x2-750)/200;}
 }
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
