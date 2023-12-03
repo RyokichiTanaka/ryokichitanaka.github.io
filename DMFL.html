@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Processing.js Demo</title>
+	<title>The DMFL model demo</title>
 </head>
 <script src="processing.js"></script>
 <script type="text/processing" data-processing-target="processing-canvas">
@@ -21,7 +21,7 @@ float[] S;
 int T;
 
 void setup(){
-  size(1100, 500);
+  size(1100, 550);
   gamma=0.5;//inverse temperature
   N=100;//lattice size
   rho=0.5;//density (parameter of Bernoulli)
@@ -110,24 +110,11 @@ void gk(){
     mag=mag+eta[i];
   }
   fill(0);
-  text("the normalized magnetization:", 140, 250);
-  text(mag/N, 300, 250);
-  //stroke(#CB4154);
-  //    fill(#CB4154);
-  //    ellipse(500+(mag/N)*100, 250,6,6);
-      
-  //bar for the normalized magnetization
-  
-  //stroke(4);
-  //fill(0);
-  //line(400,250,600,250);//horizatal
-  //line(600,245,600,255);//vertical right
-  //line(500,245,500,255);//vertical center
-  //line(400,245,400,255);//vertical left
-  
-  //text("1", 600-3, 240);
-  //text("0", 500-3, 240);
-  //text("-1",400-3, 240);
+  text("The Glauber-Exclusion process by De Masi, Ferrari and Lebowitz (1985)", 350, 60)
+  text("the 1-dimensional lattice of size N with periodic boundary condition:", 350, 520)
+  text("N=100, and the maximum value of the jump rates cmax=K*(1+2*gamma+gamma^2) where K=20.", 350, 540)
+  text("the normalized magnetization:", 450, 300);
+  text(mag/N, 610, 300);
   
   for (int k = 1; k < T; k++) { 
     S[k-1] = S[k]; 
@@ -184,23 +171,6 @@ void mouseDragged(){
     {x2=mouseX; gamma=(x2-750)/200;}
 }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   
