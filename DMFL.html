@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>The DMFL model demo</title>
+	<title>DMFL model demo</title>
 </head>
 <script src="processing.js"></script>
 <script type="text/processing" data-processing-target="processing-canvas">
@@ -111,8 +111,8 @@ void gk(){
   }
   fill(0);
   text("The Glauber-Exclusion process by De Masi, Ferrari and Lebowitz (1985)", 350, 60)
-  text("the 1-dimensional lattice of size N with periodic boundary condition:", 350, 520)
-  text("N=100, and the maximum value of the jump rates cmax=K*(1+2*gamma+gamma^2) where K=20.", 350, 540)
+  text("the 1-dimensional lattice of size N with periodic boundary condition:", 350, 350)
+  text("N=100, and the maximum value of the jump rates cmax=K*(1+2*gamma+gamma^2) where K=20.", 350, 380)
   text("the normalized magnetization:", 450, 300);
   text(mag/N, 610, 300);
   
@@ -131,10 +131,10 @@ void gk(){
   }
   stroke(4);
   fill(0);
-  line(550,350,550,450);//vertical center
-  line(100,350,1000,350);
-  line(100,400,1000,400);//horizatal at level 400 (center)
-  line(100,450,1000,450);
+  //line(550,350,550,450);//vertical center
+  //line(100,350,1000,350);
+  //line(100,400,1000,400);//horizatal at level 400 (center)
+  //line(100,450,1000,450);
   
 }
 
@@ -171,6 +171,8 @@ void mouseDragged(){
     {x2=mouseX; gamma=(x2-750)/200;}
 }
 
+  
+  
   
   
   
