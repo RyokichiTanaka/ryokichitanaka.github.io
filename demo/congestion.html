@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>congestion demo</title>
+</head>
+<script src="processing.js"></script>
+<script type="text/processing" data-processing-target="processing-canvas">
+
+//congestion dynamics: n players, Q strategies each with k availability: N=kQ and rho=n/N.
+int i, j, r, u, v, l, k, N, n, Q;
+int[] sigma;//configuration
+int[] alpha;//load profile
+int[] vac;//vacancies
+
+void setup(){
+	//white background
+	background(1000);	
+	//make the simulation faster
+	frameRate(50);
+  size(1100, 500);
+  n=100;//players
+  Q=5;//strategies
+  k=40;//availability
+  N=k*Q;
+  sigma=new int[n];//configuration
+  alpha=new int[Q];//load profile  
+  vac=new int[Q];//vacancies
+  
+  //set an initial configuration
+    for(u=0; u<Q; u++){
+      for(i=20*u; i<20*(u+1); i++) {
+        sigma[i]=u; 
+      }
+    }  
+    
+  fill(0);
+  text("The congestion dynamics", 500, 60)
+  text("n=100: players, Q=5: resources (colours), k=40: constraint of each resource: N=200, rho=0.5.", 350, 300);
+  }
+
+
+void draw(){
+
+  //compute the load profile
+  for(u=0;u<Q;u++){//initialization
+      alpha[u]=0;
+  }  
+  for(u=0;u<Q;u++){
+    for(i=0;i<n;i++){
+      if(sigma[i]==u){
+        alpha[u]=alpha[u]+1;
+      }
+    }
+  } 
+  //compute vacancies
+  for(u=0;u<Q;u++){//initialization
+    vac[u]=0;
+  }  
+  vac[0]=k-alpha[0];
+  for(u=1;u<Q;u++){
+    vac[u]=vac[u-1]+k-alpha[u];
+  }
+
+  j=int(random(N-n));//find a value which is available 
+    if(j<vac[0]){
+      v=0;
+    }
+    for(u=1;u<Q;u++){
+        if(j>=vac[u-1] && j<vac[u]){
+          v=u;
+        }
+        else{
+        }
+    }
+    
+
+  r=int(random(n));//find a place to update
+  for(i=0;i<n;i++){
+    if(i==r){
+      sigma[i]=v;//update the value at i to 'v'
+    }
+    else{
+    }
+  }
+  
+  
+  for(i=0; i<n; i++){
+    if(sigma[i]==0){
+      stroke(#008080);
+      fill(#008080);
+      ellipse(50+10*i,150,6,6);
+    }
+    else if(sigma[i]==1){
+      stroke(#DBD7D2);
+      fill(#DBD7D2);
+      ellipse(50+10*i,150,6,6);
+    }
+    else if(sigma[i]==2){
+      stroke(#318ce7);
+      fill(#318ce7);
+      ellipse(50+10*i,150,6,6);
+    }
+    else if(sigma[i]==3){
+      stroke(#b0927a);
+      fill(#b0927a);
+      ellipse(50+10*i,150,6,6);
+    }
+    else if(sigma[i]==4){
+      stroke(#88d8c0);
+      fill(#88d8c0);
+      ellipse(50+10*i,150,6,6);
+    }
+  }
+  
+  
+}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</script>
+<canvas id="processing-canvas"></canvas>
+</body>
+</html>
