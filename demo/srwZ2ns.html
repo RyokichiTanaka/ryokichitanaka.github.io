@@ -8,6 +8,7 @@
 <script type="text/processing" data-processing-target="processing-canvas">
 
 
+PGraphics pg;
 //Lazy SRW and the noised version on the Z^2.
 //SRW
 float x, x0;
@@ -43,8 +44,8 @@ float r;
 float rho, rx=500;
 
 void setup() {
-	size(1000, 1000);
-	
+	size(1000, 1000);	
+	pg = createGraphics(1000, 1000);
 	//SRW
 	//start in a fundamental domain
 	x0=1/2;
@@ -66,7 +67,7 @@ void setup() {
 	nb1=0;nb2=0;
 	
 	//white background
-	background(255);
+	pg.background(255);
 	
 	//make the simulation faster
 	frameRate(10000);
@@ -81,7 +82,7 @@ void ns() {
 	//noise 
 	r=random(0,1);
 
-	stroke(0,128,128);//teal
+	pg.stroke(0,128,128);//teal
 	U=random(0,5);
 	
 	//randomly move
@@ -142,11 +143,11 @@ void ns() {
 	}
 	
 	//draw the point
-	point(x+width*0.5,y+height*0.5);
+	pg.point(x+width*0.5,y+height*0.5);
 	
 	
 	
-	stroke(178,34,34);//firebrick
+	pg.stroke(178,34,34);//firebrick
 	
 	
 	if(r<rho){//independent increment //rho
@@ -217,7 +218,7 @@ void ns() {
 	}
 	
 	//draw the point
-	point(nx+width*0.5,ny+height*0.5);
+	pg.point(nx+width*0.5,ny+height*0.5);
 	
 	
 	
@@ -226,9 +227,12 @@ void ns() {
 
 
 void draw(){
+  pg.beginDraw();
 	ns();
+	pg.endDraw();
+	image(pg, 0, 0);
 	
-  text("Lazy SRW and the noised version: Z^2", 400, 980);
+  text("Lazy SRW and the noised version: Z^2", 400, 990);
   //set the parameter bar
   fill(0);
   text("rho", 350, 955);
@@ -241,9 +245,9 @@ void draw(){
   line(400,945,400,955);
   line(500,945,500,955);
   line(600,945,600,955);
-  fill(0,0,0,0);//transparent white
-  //fill(#DBD7D2);
-  rect(rx-2.5,947.5,5,5);
+  //fill(0,0,0,0);//transparent white  
+  fill(#DBD7D2);
+  rect(rx-4,946,8,8);
   //ellipse(rx,950,5,5);
   fill(0);  
 }
