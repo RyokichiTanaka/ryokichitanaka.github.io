@@ -17,11 +17,11 @@ void setup(){
 	//white background
 	background(1000);	
 	//make the simulation faster
-	frameRate(50);
-  size(1100, 500);
-  n=100;//players
+	frameRate(100);
+  size(1800, 500);
+  n=150;//players
   Q=5;//strategies
-  k=40;//availability
+  k=60;//availability
   N=k*Q;
   sigma=new int[n];//configuration
   alpha=new int[Q];//load profile  
@@ -29,14 +29,14 @@ void setup(){
   
   //set an initial configuration
     for(u=0; u<Q; u++){
-      for(i=20*u; i<20*(u+1); i++) {
+      for(i=30*u; i<30*(u+1); i++) {
         sigma[i]=u; 
       }
     }  
     
   fill(0);
-  text("The congestion dynamics", 500, 60)
-  text("n=100: players, Q=5: resources (colours), k=40: constraint of each resource: N=200, rho=0.5.", 350, 300);
+  text("The congestion dynamics", 700, 60)
+  text("n=150: players, Q=5: resources (colours), k=60: constraint of each resource: N=300, rho=0.5.", 550, 450);
   }
 
 
@@ -87,29 +87,36 @@ void draw(){
   
   for(i=0; i<n; i++){
     if(sigma[i]==0){
-      stroke(#008080);
-      fill(#008080);
-      ellipse(50+10*i,150,6,6);
+      stroke(#97cecc);
+      fill(#97cecc);
+      rect(50+10*i,150,10,200);
     }
     else if(sigma[i]==1){
-      stroke(#DBD7D2);
-      fill(#DBD7D2);
-      ellipse(50+10*i,150,6,6);
+      stroke(#1aa6b7);
+      fill(#1aa6b7);
+      //ellipse(50+10*i,150,6,6);      
+      rect(50+10*i,150,10,200);
     }
     else if(sigma[i]==2){
-      stroke(#318ce7);
-      fill(#318ce7);
-      ellipse(50+10*i,150,6,6);
+      stroke(#62c2cc);
+      fill(#62c2cc);
+      //ellipse(50+10*i,150,6,6);
+      
+      rect(50+10*i,150,10,200);
     }
     else if(sigma[i]==3){
-      stroke(#b0927a);
-      fill(#b0927a);
-      ellipse(50+10*i,150,6,6);
+      stroke(#3fe0d0);
+      fill(#3fe0d0);
+      //ellipse(50+10*i,150,6,6);
+      
+      rect(50+10*i,150,10,200);
     }
     else if(sigma[i]==4){
-      stroke(#88d8c0);
-      fill(#88d8c0);
-      ellipse(50+10*i,150,6,6);
+      stroke(#2e8c86);
+      fill(#2e8c86);
+      //ellipse(50+10*i,150,6,6);
+      
+      rect(50+10*i,150,10,200);
     }
   }
   
