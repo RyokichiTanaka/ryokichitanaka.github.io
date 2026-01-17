@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Non-lazy RW on a triangular lattice</title>
+</head>
+<script src="processing.js"></script>
+<script type="text/processing" data-processing-target="processing-canvas">
+
+PGraphics pg;
+//A non-lazy RW and the noised version on a triangular lattice with equilateral triangles with unit side length.
+float R=4;//similarity
+int U, V;
+float a11=cos(TWO_PI/3), a12=-sin(TWO_PI/3), a21=sin(TWO_PI/3), a22=cos(TWO_PI/3);
+float b11=cos(-TWO_PI/3), b12=-sin(-TWO_PI/3), b21=sin(-TWO_PI/3), b22=cos(-TWO_PI/3);
+float r1=1.0, r2=0.0;
+float l1=0.5, l2=sqrt(3)/2;
+
+//original walk
+float x0, y0;
+float x, y;
+float s11, s12, s21, s22;
+float x11, x12, x21, x22;
+float xtmp11, xtmp12, xtmp21, xtmp22;
+float w1, w2;
+float v1, v2;
+float vtmp1, vtmpt2;
+
+//noised walk
+float nx0, ny0;
+float nx, ny;
+float ns11, ns12, ns21, ns22;
+float nx11, nx12, nx21, nx22;
+float nxtmp11, nxtmp12, nxtmp21, nxtmp22;
+float nw1, nw2;
+float nv1, nv2;
+float nvtmp1, nvtmpt2;
+
+
+//noise parameter
+float r;
+float rho, rx=500;
+
+void setup() {
+	size(1000, 1000);
+	pg = createGraphics(1000, 1000);
+	//white background
+	pg.background(255);	
+	//make the simulation faster
+	frameRate(80);
+	
+//initial for original walk	
+x0=0.5, y0=sqrt(3)/6;//initial point
+x11=1;x12=0;x21=0;x22=1;
+v1=0;v2=0;
+
+//initial for noised walk
+nx0=0.5, ny0=sqrt(3)/6;//initial point
+nx11=1;nx12=0;nx21=0;nx22=1;
+nv1=0;nv2=0;
+
+//initial noise
+rho=0.5;
+}
+
+void ns() {
+  
+	pg.stroke(254, 114, 1);//HEX #fe7201 RGB 254, 114, 1
+	pg.strokeWeight(3);
+	U=int(random(0,6));
+	
+	//randomly move
+	if(U==0){//rotation of type 1	  
+          s11=a11;s12=a12;s21=a21;s22=a22;
+          w1=0;w2=0;
+	}
+	else if(U==1){//rotation of type 2
+	        s11=a11;s12=a12;s21=a21;s22=a22;         
+          w1=r1-(a11*r1+a12*r2);w2=r2-(a21*r1+a22*r2);
+	}
+	else if(U==2){//rotation of type 3
+	        s11=a11;s12=a12;s21=a21;s22=a22;         
+          w1=l1-(a11*l1+a12*l2);w2=l2-(a21*l1+a22*l2);     
+	}
+	else if(U==3){//rotation of type 1	inverse  
+          s11=b11;s12=b12;s21=b21;s22=b22;
+          w1=0;w2=0;
+	}
+	else if(U==4){//rotation of type 2 inverse
+	        s11=b11;s12=b12;s21=b21;s22=b22;         
+          w1=r1-(b11*r1+b12*r2);w2=r2-(b21*r1+b22*r2);
+	}
+	else if(U==5){//rotation of type 3 inverse
+	        s11=b11;s12=b12;s21=b21;s22=b22;         
+          w1=l1-(b11*l1+b12*l2);w2=l2-(b21*l1+b22*l2);     
+	}
+	
+	      xtmp11=x11*s11+x12*s21;xtmp12=x11*s12+x12*s22;       
+        xtmp21=x21*s11+x22*s21;xtmp22=x21*s12+x22*s22;
+        vtmp1=v1+(x11*w1+x12*w2);
+        vtmp2=v2+(x21*w1+x22*w2);
+        
+        x=R*(xtmp11*x0+xtmp12*y0+vtmp1);
+        y=R*(xtmp21*x0+xtmp22*y0+vtmp2);
+    
+	
+ 	
+	//prevent going off left or right
+	if(x+width*0.5<0){
+		x=width*0.5;
+	}
+	if(x+width*0.5>width){
+		x=-width*0.5;
+	}
+	
+	
+	//prevent going off top or bottom
+	if(y+height*0.5<0){
+		y=height*0.5;
+	}
+	if(y+height*0.5>height){
+		y=-height*0.5;
+	}
+	
+	//draw the point
+  pg.point(x+width*0.5,y+height*0.5);
+  
+  
+  
+	//noise 
+	r=random(0,1);
+
+  //the noised version
+	pg.stroke(1,141,254);//HEX #018dfe RGB 1, 141, 254
+	pg.strokeWeight(3);
+	
+	if(r<rho){//independent increment //rho
+	V=int(random(0,6));
+	    
+	//randomly move
+	if(V==0){//rotation of type 1	  
+          ns11=a11;ns12=a12;ns21=a21;ns22=a22;
+          nw1=0;nw2=0;
+	}
+	else if(V==1){//rotation of type 2
+	        ns11=a11;ns12=a12;ns21=a21;ns22=a22;         
+          nw1=r1-(a11*r1+a12*r2);nw2=r2-(a21*r1+a22*r2);
+	}
+	else if(V==2){//rotation of type 3
+	        ns11=a11;ns12=a12;ns21=a21;ns22=a22;         
+          nw1=l1-(a11*l1+a12*l2);nw2=l2-(a21*l1+a22*l2);     
+	}
+	else if(V==3){//rotation of type 1	inverse  
+          ns11=b11;ns12=b12;ns21=b21;ns22=b22;
+          nw1=0;nw2=0;
+	}
+	else if(V==4){//rotation of type 2  inverse
+	        ns11=b11;ns12=b12;ns21=b21;ns22=b22;         
+          nw1=r1-(b11*r1+b12*r2);nw2=r2-(b21*r1+b22*r2);
+	}
+	else if(V==5){//rotation of type 3  inverse
+	        ns11=b11;ns12=b12;ns21=b21;ns22=b22;         
+          nw1=l1-(b11*l1+b12*l2);nw2=l2-(b21*l1+b22*l2);     
+	}
+	}
+		else if(rho<=r){//identical increment
+		  ns11=s11;ns12=s12;
+		  ns21=s21;ns22=s22;
+		  nw1=w1;nw2=w2;
+		}
+	
+  
+	      nxtmp11=nx11*ns11+nx12*ns21;nxtmp12=nx11*ns12+nx12*ns22;       
+        nxtmp21=nx21*ns11+nx22*ns21;nxtmp22=nx21*ns12+nx22*ns22;
+        nvtmp1=nv1+(nx11*nw1+nx12*nw2);
+        nvtmp2=nv2+(nx21*nw1+nx22*nw2);
+        
+        nx=R*(nxtmp11*nx0+nxtmp12*ny0+nvtmp1);
+        ny=R*(nxtmp21*nx0+nxtmp22*ny0+nvtmp2);
+ 	
+	//prevent going off left or right
+	if(nx+width*0.5<0){
+		nx=width*0.5;
+	}
+	if(nx+width*0.5>width){
+		nx=-width*0.5;
+	}
+	
+	
+	//prevent going off top or bottom
+	if(ny+height*0.5<0){
+		ny=height*0.5;
+	}
+	if(ny+height*0.5>height){
+		ny=-height*0.5;
+	}
+	
+	//draw the point
+	pg.point(nx+width*0.5,ny+height*0.5);
+	
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  //initialization
+        x11=xtmp11;x12=xtmp12;
+        x21=xtmp21;x22=xtmp22;
+        v1=vtmp1;
+        v2=vtmp2;
+        
+        
+        nx11=nxtmp11;nx12=nxtmp12;
+        nx21=nxtmp21;nx22=nxtmp22;
+        nv1=nvtmp1;
+        nv2=nvtmp2;
+	
+	
+}
+
+
+void draw(){
+  pg.beginDraw();
+	ns();
+	pg.endDraw();
+	image(pg, 0, 0);
+	
+	
+  text("Non-lazy RW and the noised version on a triangular lattice", 360, 990);
+  //set the parameter bar
+  fill(0);
+  text("rho", 350, 955);
+  text("0", 400, 940);
+  text("0.5", 500, 940);
+  text("1", 600, 940);
+  stroke(4);
+  fill(0);
+  line(400,950,600,950);
+  line(400,945,400,955);
+  line(500,945,500,955);
+  line(600,945,600,955);
+  //fill(0,0,0,0);//transparent white
+  fill(#DBD7D2);
+  rect(rx-4,946,8,8);
+  //ellipse(rx,950,5,5);
+  fill(0);  
+	
+}
+
+
+  
+  
+  
+  
+  
+  
+
+void mouseDragged(){
+    if(mouseX>=400 && mouseX<=600 && mouseY>=925 && mouseY<=975)
+    {rx=mouseX; rho=(rx-500)/200;}
+}
+  
+  
+  
+  
+  
+</script>
+<canvas id="processing-canvas"></canvas>
+</body>
+</html>
